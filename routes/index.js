@@ -7,6 +7,9 @@ const sqlMap = require('../db/sqlMap')
 const conn = mysqls.createConnection(models.mysql)
 
 conn.connect()
+const request = require("request");
+
+
 
 let jsonWrite = function (res, ret) {
   if (typeof ret === 'undefined') {
@@ -27,17 +30,18 @@ router.all('*', (req, res, next) => {
   next()
 })
 router.post('/addUser', (req, res) => {
-  let sql = sqlMap.user.add
-  let params = req.body
-  conn.query(sql, [params.name, params.account, params.pass, params.checkPass,
-    params.email, params.phone, params.card, dateStr(params.birth), params.sex], function (err, result) {
-    if (err) {
-      console.log(err)
-    }
-    if (result) {
-      jsonWrite(res, result)
-    }
-  })
+    let sql = sqlMap.user.add
+    let params = req.body
+    conn.query(sql, [params.name, params.account, params.pass, params.checkPass,
+        params.email, params.phone, params.card, dateStr(params.birth), params.sex], function (err, result) {
+        if (err) {
+            console.log(err)
+        }
+        if (result) {
+            jsonWrite(res, result)
+        }
+    })
+
 })
 
 /* GET home page. */
