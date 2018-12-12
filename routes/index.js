@@ -107,5 +107,23 @@ router.post('/updateUser', (req, res) => {
         }
     })
 })
-
+router.post('/modifyPassword', (req, res) => {
+    let sql_modify = sqlMap.user.update_user
+    let params = req.body
+    if (params.id) {
+        sql_modify += " password = " + params.pass +
+            ",repeatPass = " + params.checkPass +
+            " where id = " + params.id
+    }
+    conn.query(sql_modify, params.id, function (err, result) {
+        if (err) {
+            console.log(err)
+        }
+        if(result.affectedRows === undefined) {
+            res.send('修改密码失败，请联系管理员')
+        } else {
+            res.send('ok')
+        }
+    })
+})
 module.exports = router
