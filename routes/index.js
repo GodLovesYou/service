@@ -7,9 +7,6 @@ const sqlMap = require('../db/sqlMap')
 const conn = mysqls.createConnection(models.mysql)
 
 conn.connect()
-const request = require("request");
-
-
 
 let jsonWrite = function (res, ret) {
   if (typeof ret === 'undefined') {
@@ -68,6 +65,24 @@ router.post('/login', function (req, res) {
       }
     }
   })
+})
+
+router.get('/getUser', (req, res) => {
+    let sql_name = sqlMap.user.select_name;
+    let params = req.body
+    if (params.name) {
+        sql_name += "where username ="+params.name
+    }
+    conn.query(sql_name, params.name, function(err, result){
+        if (err) {
+            console.log(err)
+        }
+        if (result[0] === undefined) {
+            res.send('-1')
+        } else {
+            jsonWrite(res, result)
+        }
+    })
 })
 
 module.exports = router
