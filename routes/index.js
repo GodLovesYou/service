@@ -88,34 +88,36 @@ router.get('/getUser', (req, res) => {
 router.post('/updateUser', (req, res) => {
     let sql_update = sqlMap.user.update_user
     let params = req.body
-    if(params.id) {
-        sql_update += "email = " + params.email +
-            ",phone = " +params.phone +
-            ",card = " +params.card +
-            ",birth = " +params.birth +
-            ",sex = " + params.sex +
-            " where id = " + params.id
+    if(params.index) {
+        sql_update += " `email` = '" + params.email +
+            "',`phone` = '" +params.phone +
+            "',`card` = '" +params.card +
+            "',`birth` = '" +params.birth +
+            "',`sex` = '" + params.sex +
+            "' where `index` = " + params.index
+        conn.query(sql_update, params.index, function (err, result) {
+            if (err) {
+                console.log(err)
+            }
+            if (result.affectedRows === undefined) {
+                res.send('更新失败，请联系管理员')
+            } else {
+                res.send('ok')
+            }
+        })
+    } else {
+        res.send('id错误')
     }
-    conn.query(sql_update, params.id, function (err, result) {
-        if (err) {
-            console.log(err)
-        }
-        if (result.affectedRows === undefined) {
-            res.send('更新失败，请联系管理员')
-        } else {
-            res.send('ok')
-        }
-    })
 })
 router.post('/modifyPassword', (req, res) => {
     let sql_modify = sqlMap.user.update_user
     let params = req.body
-    if (params.id) {
-        sql_modify += " password = " + params.pass +
-            ",repeatPass = " + params.checkPass +
-            " where id = " + params.id
+    if (params.index) {
+        sql_modify += " `password` = '" + params.pass +
+            "',`repeatPass` = '" + params.checkPass +
+            "' where `index` = " + params.index
     }
-    conn.query(sql_modify, params.id, function (err, result) {
+    conn.query(sql_modify, params.index, function (err, result) {
         if (err) {
             console.log(err)
         }
